@@ -17,12 +17,19 @@ class ProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response
      */
+
     public function edit(Request $request)
     {
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
         ]);
+    }
+
+    public function hashedMail()
+    {
+
+        return hash_hmac('sha256', 'mosbah.hamdi@DJERBA.r-iset.tn', 'OTQ0NTNjMTItZDYyMy00MWFlLTk1N2EtMTM1ZmQyNDEyZjI3');
     }
 
     /**
@@ -50,6 +57,7 @@ class ProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
+
     public function destroy(Request $request)
     {
         $request->validate([

@@ -23,7 +23,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'type'
+        'type',
+        'profilePicture'
+        
     ];
   
     /**
@@ -57,6 +59,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return new Attribute(
             get: fn ($value) =>  ["user", "admin", "manager"][$value],
+        );
+    }
+
+
+    protected function profilePicture(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => url('uploads/'.$value),
         );
     }
 }

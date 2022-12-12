@@ -1,466 +1,411 @@
-<template>
-  <Popover class="relative bg-white">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6">
-      <div class="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
-        <div class="flex justify-start lg:w-0 lg:flex-1">
-          <a href="#">
-            <span class="sr-only">Your Company</span>
-            <img class="h-8 w-auto sm:h-10" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
-          </a>
-        </div>
-        <div class="-my-2 -mr-2 md:hidden">
-          <PopoverButton class="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-            <span class="sr-only">Open menu</span>
-            <Bars3Icon class="h-6 w-6" aria-hidden="true" />
-          </PopoverButton>
-        </div>
-        <PopoverGroup as="nav" class="hidden space-x-10 md:flex">
-          <Popover class="relative" v-slot="{ open }">
-            <PopoverButton :class="[open ? 'text-gray-900' : 'text-gray-500', 'group inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2']">
-              <span>Solutions</span>
-              <ChevronDownIcon :class="[open ? 'text-gray-600' : 'text-gray-400', 'ml-2 h-5 w-5 group-hover:text-gray-500']" aria-hidden="true" />
-            </PopoverButton>
-
-            <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
-              <PopoverPanel class="absolute z-10 -ml-4 mt-3 w-screen max-w-md transform px-2 sm:px-0 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2">
-                <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                  <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-                    <a v-for="item in solutions" :key="item.name" :href="item.href" class="-m-3 flex items-start rounded-lg  hover:bg-gray-50">
-                      <component :is="item.icon" class="h-6 w-6 flex-shrink-0 text-indigo-600" aria-hidden="true" />
-                      <div class="ml-4">
-                        <p class="text-base font-medium text-gray-900">{{ item.name }}</p>
-                        <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="space-y-6 bg-gray-50 px-5 py-5 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
-                    <div v-for="item in callsToAction" :key="item.name" class="flow-root">
-                      <a :href="item.href" class="-m-3 flex items-center rounded-md  text-base font-medium text-gray-900 hover:bg-gray-100">
-                        <component :is="item.icon" class="h-6 w-6 flex-shrink-0 text-gray-400" aria-hidden="true" />
-                        <span class="ml-3">{{ item.name }}</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </PopoverPanel>
-            </transition>
-          </Popover>
-
-      
-          <Popover class="relative" v-slot="{ open }">
-            <PopoverGroup as="nav" class="hidden space-x-10 md:flex">
-        
-
-          <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">Pricing</a>
-          <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">Docs</a>
-
-        
-        </PopoverGroup>
-
-            <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
-              <PopoverPanel class="absolute left-1/2 z-10 mt-3 w-screen max-w-md -translate-x-1/2 transform px-2 sm:px-0">
-                <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                  <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-                    <a v-for="item in resources" :key="item.name" :href="item.href" class="-m-3 flex items-start rounded-lg  hover:bg-gray-50">
-                      <component :is="item.icon" class="h-6 w-6 flex-shrink-0 text-indigo-600" aria-hidden="true" />
-                      <div class="ml-4">
-                        <p class="text-base font-medium text-gray-900">{{ item.name }}</p>
-                        <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="bg-gray-50 px-5 py-5 sm:px-8 sm:py-8">
-                    <div>
-                      <h3 class="text-base font-medium text-gray-500">Recent Posts</h3>
-                      <ul role="list" class="mt-4 space-y-4">
-                        <li v-for="post in recentPosts" :key="post.id" class="truncate text-base">
-                          <a :href="post.href" class="font-medium text-gray-900 hover:text-gray-700">{{ post.name }}</a>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="mt-5 text-sm">
-                      <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-                        View all posts
-                        <span aria-hidden="true"> &rarr;</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </PopoverPanel>
-            </transition>
-          </Popover>
-
-        </PopoverGroup>
-
-      
-       
-      </div>
-    </div>
-
-    <transition enter-active-class="duration-200 ease-out" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="duration-100 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-      <PopoverPanel focus class="absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden">
-        <div class="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-          <div class="px-5 pt-5 pb-6">
-            <div class="flex items-center justify-between">
-              <div>
-                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
-              </div>
-              <div class="-mr-2">
-                <PopoverButton class="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                  <span class="sr-only">Close menu</span>
-                  <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-                </PopoverButton>
-              </div>
-            </div>
-            <div class="mt-6">
-              <nav class="grid gap-y-8">
-                <a v-for="item in solutions" :key="item.name" :href="item.href" class="-m-3 flex items-center rounded-md  hover:bg-gray-50">
-                  <component :is="item.icon" class="h-6 w-6 flex-shrink-0 text-indigo-600" aria-hidden="true" />
-                  <span class="ml-3 text-base font-medium text-gray-900">{{ item.name }}</span>
-                </a>
-              </nav>
-            </div>
-          </div>
-         
-        </div>
-      </PopoverPanel>
-    </transition>
-  </Popover>
-
-
-
-
-  <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
-  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-    <div class="relative flex h-16 items-center justify-between">
-      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-        <!-- Mobile menu button-->
-        <DisclosureButton class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-          <span class="sr-only">Open main menu</span>
-          <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
-          <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
-        </DisclosureButton>
-      </div>
-      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-       
-        <div class="hidden sm:ml-6 sm:block">
-          <div class="flex space-x-4">
-            <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
-          </div>
-        </div>
-      </div>
-      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-        <button type="button" class="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-          <span class="sr-only">View notifications</span>
-          <BellIcon class="h-6 w-6" aria-hidden="true" />
-        </button>
-
-        <!-- Profile dropdown -->
-        <Menu as="div" class="relative ml-3">
-          <div>
-            <MenuButton class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-              <span class="sr-only">Open user menu</span>
-              <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
-            </MenuButton>
-          </div>
-          <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-            <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <MenuItem v-slot="{ active }">
-                <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your Profile</a>
-              </MenuItem>
-              <MenuItem v-slot="{ active }">
-                <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>
-              </MenuItem>
-              <MenuItem v-slot="{ active }">
-                <a  :href="route('logout')" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>
-              </MenuItem>
-            </MenuItems>
-          </transition>
-        </Menu>
-      </div>
-    </div>
-  </div>
-
-  <DisclosurePanel class="sm:hidden">
-    <div class="space-y-1 px-2 pt-2 pb-3">
-      <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</DisclosureButton>
-    </div>
-  </DisclosurePanel>
-</Disclosure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          <div class="flex items-baseline " >
-<div class="py-4">
-  
-<div class="h-full w-64 border-r pt-10 px-5">
-             
-             <!-- menu-item -->
-             <div
-                 class="mt-4 py-1.5 text-sm font-medium text-slate-500 hover:text-blue-500 group cursor-pointer flex items-center">
-                 <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-5 stroke-slate-400 mr-4 group-hover:stroke-blue-500" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor" stroke-width="2">
-                     <path stroke-linecap="round" stroke-linejoin="round"
-                         d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                 </svg>
-                 Dashboard
-             </div>
-
-             <p class="text-xs font-medium text-gray-400 mt-8">APPLICATIONS</p>
-             <div 
-                 class="mt-4 py-1.5 text-sm font-medium text-slate-500 hover:text-blue-500 group cursor-pointer flex items-center">
-                 <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="h-5 stroke-slate-400 mr-4 group-hover:stroke-blue-500" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor" stroke-width="2">
-
-                     <path stroke-linecap="round" stroke-linejoin="round"
-                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-
-                 </svg>
-                 Calender
-             </div>
-
-             <div class="mt-4 py-1.5 text-sm font-medium  text-blue-500 group cursor-pointer flex items-center">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5   mr-4  stroke-blue-500" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-
-                     <path stroke-linecap="round" stroke-linejoin="round"
-                         d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-
-                 </svg>
-                 Messages
-             </div>
-
-             <div
-                 class="mt-4 py-1.5 text-sm font-medium text-slate-500 hover:text-blue-500 group cursor-pointer flex items-center">
-                 <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-5 stroke-slate-400 mr-4 group-hover:stroke-blue-500" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor" stroke-width="2">
-
-
-                     <path stroke-linecap="round" stroke-linejoin="round"
-                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-
-
-                 </svg>
-                 Contacts
-             </div>
-
-             <div
-                 class="mt-4 py-1.5 text-sm font-medium text-slate-500 hover:text-blue-500 group cursor-pointer flex items-center">
-                 <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-5 stroke-slate-400 mr-4 group-hover:stroke-blue-500" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor" stroke-width="2">
-
-                     <path stroke-linecap="round" stroke-linejoin="round"
-                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-
-                 </svg>
-                 Team Members
-             </div>
-
-             <div
-                 class="mt-4 py-1.5 text-sm font-medium text-slate-500 hover:text-blue-500 group cursor-pointer flex items-center">
-                 <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-5 stroke-slate-400 mr-4 group-hover:stroke-blue-500" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor" stroke-width="2">
-
-                     <path stroke-linecap="round" stroke-linejoin="round"
-                         d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                 </svg>
-                 Projects
-             </div>
-
-             <div
-                 class="mt-4 py-1.5 text-sm font-medium text-slate-500 hover:text-blue-500 group cursor-pointer flex items-center">
-                 <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-5 stroke-slate-400 mr-4 group-hover:stroke-blue-500" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor" stroke-width="2">
-
-                     <path stroke-linecap="round" stroke-linejoin="round"
-                         d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                 </svg>
-                 Job Listing
-             </div>
-
-
-         </div>
-
- 
-</div>
-<div id="main-content" class="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-64">
-  <main>
-    Content
-  </main>
-  
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-</template>
-
 <script setup>
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, useForm } from "@inertiajs/inertia-vue3";
+import { ref } from "vue";
 
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Link, useForm, usePage } from '@inertiajs/inertia-vue3';
-import InputError from '@/Components/InputError.vue';
+const showEditPage = ref(false);
+const showImagePage = ref(false);
 
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-
-
-
-import { Head } from '@inertiajs/inertia-vue3';
-import { ref } from 'vue';
-import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue'
-import {
-  ArrowPathIcon,
-  Bars3Icon,
-  BookmarkSquareIcon,
-  CalendarIcon,
-  ChartBarIcon,
-  CursorArrowRaysIcon,
-  LifebuoyIcon,
-  PhoneIcon,
-  PlayIcon,
-  ShieldCheckIcon,
-  Squares2X2Icon,
-  XMarkIcon,
-} from '@heroicons/vue/24/outline'
-import { ChevronDownIcon } from '@heroicons/vue/20/solid'
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import {  BellIcon } from '@heroicons/vue/24/outline'
-
-const navigation = [
-{ name: 'Dashboard', href: "", current: true },
-{ name: 'Team', href: '#', current: false },
-{ name: 'Projects', href: '#', current: false },
-{ name: 'Calendar', href: '#', current: false },
-]
-const solutions = [
-  {
-    name: 'Analytics',
-    description: 'Get a better understanding of where your traffic is coming from.',
-    href: '#',
-    icon: ChartBarIcon,
-  },
-  {
-    name: 'Engagement',
-    description: 'Speak directly to your customers in a more meaningful way.',
-    href: '#',
-    icon: CursorArrowRaysIcon,
-  },
-  { name: 'Security', description: "Your customers' data will be safe and secure.", href: '#', icon: ShieldCheckIcon },
-  {
-    name: 'Integrations',
-    description: "Connect with third-party tools that you're already using.",
-    href: '#',
-    icon: Squares2X2Icon,
-  },
-  {
-    name: 'Automations',
-    description: 'Build strategic funnels that will drive your customers to convert',
-    href: '#',
-    icon: ArrowPathIcon,
-  },
-]
-const callsToAction = [
-  { name: 'Watch Demo', href: '#', icon: PlayIcon },
-  { name: 'Contact Sales', href: '#', icon: PhoneIcon },
-]
-const resources = [
-  {
-    name: 'Help Center',
-    description: 'Get all of your questions answered in our forums or contact support.',
-    href: '#',
-    icon: LifebuoyIcon,
-  },
-  {
-    name: 'Guides',
-    description: 'Learn how to maximize our platform to get the most out of it.',
-    href: '#',
-    icon: BookmarkSquareIcon,
-  },
-  {
-    name: 'Events',
-    description: 'See what meet-ups and other events we might be planning near you.',
-    href: '#',
-    icon: CalendarIcon,
-  },
-  { name: 'Security', description: 'Understand how we take your privacy seriously.', href: '#', icon: ShieldCheckIcon },
-]
-const recentPosts = [
-  { id: 1, name: 'Boost your conversion rate', href: '#' },
-  { id: 2, name: 'How to use search engine optimization to drive traffic to your site', href: '#' },
-  { id: 3, name: 'Improve your customer experience', href: '#' },
-]
+const imgTitle = ref("");
+const imgDescription = ref("");
+const imgName = ref("");
 
 const props = defineProps({
-  mustVerifyEmail: Boolean,
-  status: String,
-  
+  files: Array,
+  msg: String,
 });
-
-const user = usePage().props.value.auth.user;
 
 const form = useForm({
-  name: user.name,
-  email: user.email,
-  current_password: '',
-  password: '',
-  password_confirmation: '',
+  title: "",
+  file: null,
+  name: "",
+  description: "",
+});
+const formUpdate = useForm({
+  title: "",
+  description: "",
+  id: 0,
 });
 
-const passwordInput = ref(null);
-const currentPasswordInput = ref(null);
+const submit = () => {
+  
+  form.post(route("file.upload.store"));
+  form.title = "";
+  form.description = "";
+  form.name = "";
+  form.file = null;
+  
+};
 
+const submitUpdate = () => {
+  showEditPage.value = !showEditPage.value;
 
-
-const updatePassword = () => {
-  form.put(route('password.update'), {
-      preserveScroll: true,
-      onSuccess: () => form.reset(),
-      onError: () => {
-          if (form.errors.password) {
-              form.reset('password', 'password_confirmation');
-              passwordInput.value.focus();
-          }
-          if (form.errors.current_password) {
-              form.reset('current_password');
-              currentPasswordInput.value.focus();
-          }
-      },
-  });
+  formUpdate
+    .put("http://127.0.0.1:8000/updateImage", {
+      title: formUpdate.title,
+      description: formUpdate.description,
+      id: formUpdate.id,
+    })
+    .then(function (response) {
+      console.log("responce  : " + response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 };
 
 
+
+function showImage(name, title, description) {
+  showEditPage.value = false;
+  showImagePage.value = true;
+  this.imgName = name;
+  this.imgTitle = title;
+  this.imgDescription = description;
+}
+function deleteImage(id) {
+  form.delete(`http://127.0.0.1:8000/deleteImage/${id}`);
+  
+  
+}
+
+function editForm(id, title, description) {
+  showEditPage.value = !showEditPage.value;
+  formUpdate.title = title;
+  formUpdate.description = description;
+  formUpdate.id = id;
+}
+function back() {
+  showImagePage.value = false;
+}
+
 </script>
+<template>
+  <Head title="Profile" />
+  <AuthenticatedLayout>
+    <template #header>
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
+    </template>
+
+    <div class="py-12">
+      <div class="mx-auto sm:px-6 lg:px-8 space-y-3">
+        <div
+          v-if="!showEditPage && !showImagePage"
+          class="p-4 sm:p-8 bg-white shadow sm:rounded-lg"
+        >
+          <section>
+            <div class="grid grid-flow-col space-x-6">
+              <div class="space-y-4">
+                <header>
+                  <h2 class="text-lg font-medium text-gray-900">Upload Image</h2>
+                </header>
+
+                <form @submit.prevent="submit">
+                  <div class="relative z-0 mb-6 w-full group">
+                    <input
+                      v-model="form.title"
+                      type="text"
+                      id="title"
+                      class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                      placeholder=" "
+                     
+                    />
+                    <label
+                      for="floating_email"
+                      class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                      >Image title</label
+                    >
+                  </div>
+
+                  <div class="relative z-0 mb-6 w-full group items-center justify-center">
+                    <textarea
+                      name="imageDescription"
+                      id="description"
+                      v-model="form.description"
+                      class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                      placeholder=" "
+                      required
+                    ></textarea>
+                    <label
+                      for="floating_email"
+                      class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                      >Image description</label
+                    >
+                  </div>
+
+                  <div class="space-x-4">
+                    <label
+                      v-if="form.file === null"
+                      class="bg-transparent hover:bg-indigo-600 hover:text-white text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                      for="file"
+                    >
+                      <input
+                        id="file"
+                        type="file"
+                        hidden
+                        @input="form.file = $event.target.files[0]"
+                        autofocus
+                      />
+                       
+                      Upload image
+                    </label>
+                    <button
+                    
+                    
+                      type="submit"
+                      class="bg-transparent hover:bg-indigo-600 hover:text-white text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <!-- ... -->
+              <div class="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl ...">
+                <div class="overflow-x-auto relative shadow-md sm:rounded-lg flex">
+                  <div>
+                    <table
+                      class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+                    >
+                      <thead
+                        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                      >
+                        <tr>
+                          <th scope="col" class="py-3 px-6">Image</th>
+
+                          <th scope="col" class="py-3 px-6">Title</th>
+
+                          <th scope="col" class="py-3 px-6">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="file in files"
+                          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                        >
+                          <td class="p-4 w-32">
+                            <img
+                              class="inline object-cover w-12 h-12 mr-2 rounded"
+                              :src="file.name"
+                              alt="profile pic"
+                            />
+                          </td>
+
+                          <td
+                            class="py-4 px-6 font-semibold text-gray-900 dark:text-white"
+                          >
+                            {{ file.title }}
+                          </td>
+
+                          <td class="py-4 px-6">
+                            <div class="flex space-x-4">
+                              <div>
+                                <!-- 
+       <Link :href="route('showFile',{id:file.id})" class=" inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-1 text-base font-medium text-white hover:bg-indigo-700">show</Link>
+
+       -->
+                              </div>
+                              <div>
+                                <button
+                                  @click="
+                                    showImage(file.name, file.title, file.description)
+                                  "
+                                  class="font-medium text-green-600 dark:text-green-500 hover:underline"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-6 h-6"
+                                  >
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                                    />
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+
+                              <div>
+                                <button
+                                  @click="editForm(file.id, file.title, file.description)"
+                                  class="font-medium text-blue-600 dark:text-green-500 hover:underline"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-6 h-6"
+                                  >
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                              <div>
+                                <button
+                                  @click="deleteImage(file.id)"
+                                  class="font-medium text-red-600 dark:text-red-500 hover:underline"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-6 h-6"
+                                  >
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div
+          v-else-if="showEditPage && !showImagePage"
+          class="p-4 sm:p-8 bg-white shadow sm:rounded-lg space-y-4"
+        >
+          <header>
+            <h2 class="text-lg font-medium text-gray-900">Update image data</h2>
+          </header>
+          <div>
+            <form @submit.prevent="submitUpdate">
+              <div class="relative z-0 mb-6 w-full group">
+                <input
+                  v-model="formUpdate.title"
+                  type="text"
+                  name="imageTitle"
+                  id="imageTitle"
+                  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  for="floating_email"
+                  class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  >Image title</label
+                >
+              </div>
+
+              <div class="relative z-0 mb-6 w-full group">
+                <input type="text" id="id" hidden v-model="formUpdate.id" />
+                <textarea
+                  v-model="formUpdate.description"
+                  name="imageDescription"
+                  id="imageDescription"
+                  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                ></textarea>
+                <label
+                  for="floating_email"
+                  class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  >Image description</label
+                >
+              </div>
+
+              <button
+                type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Update
+              </button>
+            </form>
+          </div>
+        </div>
+        <div v-else class="p-4 sm:p-8 bg-white shadow sm:rounded-lg space-y-4">
+          <header></header>
+          <div>
+            <div class="mt-5" v-if="showImagePage">
+              <button
+                @click="back()"
+                class="bg-transparent hover:bg-indigo-600 hover:text-white text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </button>
+              <div class="w-full max-w-sm mt-6 lg:max-w-full lg:flex">
+                <div
+                  class="flex-none h-48 overflow-hidden text-center bg-cover rounded-t lg:h-auto lg:w-48 lg:rounded-t-none lg:rounded-l"
+                  v-bind:style="{ backgroundImage: 'url(' + imgName + ')' }"
+                ></div>
+                <div
+                  class="flex flex-col justify-between p-4 leading-normal bg-white border-b border-l border-r border-gray-200 rounded-b lg:border-l-0 lg:border-t lg:border-gray-200 lg:rounded-b-none lg:rounded-r"
+                >
+                  <div class="mb-8">
+                    <p class="flex items-center text-sm text-gray-600">
+                      <svg
+                        class="w-3 h-3 mr-2 text-gray-500 fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z"
+                        />
+                      </svg>
+                      Members only
+                    </p>
+                    <div class="mb-2 text-xl font-bold text-gray-900">
+                      {{ imgTitle }}
+                    </div>
+                    <p class="text-base text-gray-700">
+                      {{ imgDescription }}
+                    </p>
+                  </div>
+                  <div class="flex items-center">
+                    <svg v-if="true==false" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+</svg>
+
+                    <div class="text-sm">
+                      <p class="leading-none text-gray-900">task pending</p>
+                      <p v-if="true==false" class="text-gray-600">Aug 18</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </AuthenticatedLayout>
+</template>

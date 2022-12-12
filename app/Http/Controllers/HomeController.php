@@ -1,9 +1,9 @@
 <?php
-  
+
 namespace App\Http\Controllers;
- 
-use Illuminate\Http\Request;
-  
+
+use Inertia\Inertia;
+
 class HomeController extends Controller
 {
     /**
@@ -13,9 +13,9 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth','verified']);
+        $this->middleware(['auth', 'verified']);
     }
-  
+
     /**
      * Show the application dashboard.
      *
@@ -23,9 +23,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
-    } 
-  
+        return Inertia::render('Dashboard');
+    }
+
     /**
      * Show the application dashboard.
      *
@@ -33,9 +33,9 @@ class HomeController extends Controller
      */
     public function adminHome()
     {
-        return view('adminHome');
+        return Inertia::render('DashboardAdmin');
     }
-  
+
     /**
      * Show the application dashboard.
      *
@@ -43,6 +43,6 @@ class HomeController extends Controller
      */
     public function managerHome()
     {
-        return view('managerHome');
+        return Inertia::render('DashboardManager');
     }
 }
