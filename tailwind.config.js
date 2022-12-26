@@ -21,5 +21,9 @@ module.exports = {
         },
     },
 
+    extend: {
+        // ...
+       listStylePosition: ['hover', 'focus'],
+      },
     plugins: [require('@tailwindcss/forms')],
 };

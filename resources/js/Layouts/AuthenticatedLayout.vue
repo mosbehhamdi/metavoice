@@ -1,98 +1,8 @@
 <script setup>
 import { Link, useForm, usePage } from "@inertiajs/inertia-vue3";
 
-import {
-  ArrowPathIcon,
-  BookmarkSquareIcon,
-  CalendarIcon,
-  ChartBarIcon,
-  CursorArrowRaysIcon,
-  LifebuoyIcon,
-  PhoneIcon,
-  PlayIcon,
-  ShieldCheckIcon,
-  Squares2X2Icon,
-} from "@heroicons/vue/24/outline";
-
 import { ref } from "vue";
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-];
 
-const solutions = [
-  {
-    name: "Analytics",
-    description: "Get a better understanding of where your traffic is coming from.",
-    href: "#",
-    icon: ChartBarIcon,
-  },
-  {
-    name: "Engagement",
-    description: "Speak directly to your customers in a more meaningful way.",
-    href: "#",
-    icon: CursorArrowRaysIcon,
-  },
-  {
-    name: "Security",
-    description: "Your customers' data will be safe and secure.",
-    href: "#",
-    icon: ShieldCheckIcon,
-  },
-  {
-    name: "Integrations",
-    description: "Connect with third-party tools that you're already using.",
-    href: "#",
-    icon: Squares2X2Icon,
-  },
-  {
-    name: "Automations",
-    description: "Build strategic funnels that will drive your customers to convert",
-    href: "#",
-    icon: ArrowPathIcon,
-  },
-];
-const callsToAction = [
-  { name: "Watch Demo", href: "#", icon: PlayIcon },
-  { name: "Contact Sales", href: "#", icon: PhoneIcon },
-];
-const resources = [
-  {
-    name: "Help Center",
-    description: "Get all of your questions answered in our forums or contact support.",
-    href: "#",
-    icon: LifebuoyIcon,
-  },
-  {
-    name: "Guides",
-    description: "Learn how to maximize our platform to get the most out of it.",
-    href: "#",
-    icon: BookmarkSquareIcon,
-  },
-  {
-    name: "Events",
-    description: "See what meet-ups and other events we might be planning near you.",
-    href: "#",
-    icon: CalendarIcon,
-  },
-  {
-    name: "Security",
-    description: "Understand how we take your privacy seriously.",
-    href: "#",
-    icon: ShieldCheckIcon,
-  },
-];
-const recentPosts = [
-  { id: 1, name: "Boost your conversion rate", href: "#" },
-  {
-    id: 2,
-    name: "How to use search engine optimization to drive traffic to your site",
-    href: "#",
-  },
-  { id: 3, name: "Improve your customer experience", href: "#" },
-];
 const props = defineProps({
   mustVerifyEmail: Boolean,
   status: String,
@@ -101,39 +11,24 @@ const user = usePage().props.value.auth.user;
 const form = useForm({
   name: user.name,
   email: user.email,
+  id: user.id,
   current_password: "",
   password: "",
   password_confirmation: "",
 });
-const passwordInput = ref(null);
-const currentPasswordInput = ref(null);
-const updatePassword = () => {
-  form.put(route("password.update"), {
-    preserveScroll: true,
-    onSuccess: () => form.reset(),
-    onError: () => {
-      if (form.errors.password) {
-        form.reset("password", "password_confirmation");
-        passwordInput.value.focus();
-      }
-      if (form.errors.current_password) {
-        form.reset("current_password");
-        currentPasswordInput.value.focus();
-      }
-    },
-  });
-};
-const showingNavigationDropdown = ref(false);
 
-const activeClass = ref("bg-gray-600 bg-opacity-25 text-gray-100 border-gray-100");
-const inactiveClass = ref(
-  "border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100"
-);
 const dropdownOpen = ref(false);
+
+const isOpen = ref(false);
+const dropdown1 = ref(false);
+const dropdown2 = ref(false);
+const dropdown3 = ref(false);
+const dropdownTeam = ref(false);
+const dropdownOpenSkills = ref(false);
 </script>
 
 <template>
-  <div class="flex h-screen bg-gray-200 font-roboto">
+  <div class="flex h-screen bg-white font-roboto">
     <div class="flex">
       <!-- Backdrop -->
       <div
@@ -145,282 +40,427 @@ const dropdownOpen = ref(false);
 
       <div
         :class="isOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'"
-        class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0"
+        class="fixed inset-y-0 center z-30 w-64 overflow-y-auto transition duration-300 transform bg-white lg:translate-x-0 lg:static lg:inset-0"
       >
-        <div class="flex items-center justify-center mt-8">
-          <Link :href="route('dashboard')">
-            <div class="flex items-center">
-              <img
-                class="inline object-cover w-12 h-12 mr-2 rounded-full"
-                v-bind:src="'/appLogo.jpg'"
-                alt="Logo image"
-              />
-
-              <path
-                d="M364.61 390.213C304.625 450.196 207.37 450.196 147.386 390.213C117.394 360.22 102.398 320.911 102.398 281.6C102.398 242.291 117.394 202.981 147.386 172.989C147.386 230.4 153.6 281.6 230.4 307.2C230.4 256 256 102.4 294.4 76.7999C320 128 334.618 142.997 364.608 172.989C394.601 202.981 409.597 242.291 409.597 281.6C409.597 320.911 394.601 360.22 364.61 390.213Z"
-                fill="#4C51BF"
-                stroke="#4C51BF"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M201.694 387.105C231.686 417.098 280.312 417.098 310.305 387.105C325.301 372.109 332.8 352.456 332.8 332.8C332.8 313.144 325.301 293.491 310.305 278.495C295.309 263.498 288 256 275.2 230.4C256 243.2 243.201 320 243.201 345.6C201.694 345.6 179.2 332.8 179.2 332.8C179.2 352.456 186.698 372.109 201.694 387.105Z"
-                fill="white"
-              />
-
-              <span class="mx-2 text-2xl font-semibold text-white">Metavoice</span>
+        <div class="flex justify-center">
+          <div class="flex justify-center">
+            <div>
+              <div class="text-white">
+                <div class="flex p-2"></div>
+                <div class="flex justify-center">
+                  <div class="">
+                    <img
+                      class="hidden h-full w-24 rounded-full sm:block object-cover mr-2 border-4 border-white"
+                      src="appLogo.jpg"
+                      alt=""
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-          </Link>
+          </div>
         </div>
 
-        <nav class="mt-10 text-white">
-          <Link
-            class="hover:bg-indigo-600 hover:text-white flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
-            :href="route('dashboard')"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"
-              />
-            </svg>
+        <nav class="mt-10 text-slate-500" v-if="user.type === 'admin'">
+          <ul class="mt-12">
+            <li class="relative px-6 py-1">
+              <a
+                href="/"
+                class="router-link-active bg-purple-600 text-white inline-flex items-center w-full text-sm font-semibold transition duration-200 ease-in hover:bg-purple-800 hover:text-white py-2 px-2 rounded-lg"
+                aria-current="page"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  class="flex-shrink-0 h-6 w-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  ></path></svg
+                ><span class="ml-4">METAVOICE</span></a
+              >
+            </li>
+            <li class="relative px-6 py-1">
+              <button
+                class="inline-flex items-center w-full text-sm font-semibold transition duration-200 ease-in hover:bg-purple-500 hover:text-white py-2 px-2 rounded-lg"
+                @click="dropdown1 = !dropdown1"
+                aria-haspopup="true"
+              >
+                <span class="inline-flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"
+                    />
+                  </svg>
 
-            <span class="mx-4">Photos repairing</span>
-          </Link>
+                  <span class="ml-4">Flux de travail</span>
+                </span>
+              </button>
 
-          <router-link
-            class="hover:bg-indigo-600 hover:text-white flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
-            to="/ui-elements"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12"
-              />
-            </svg>
+              <div v-show="dropdown1">
+                <div class="w-48 bg-white rounded-lg border">
+                  <Link
+                    :href="route('Tasks')"
+                    type="button"
+                    class="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium hover:bg-gray-100 hover:text-purple-700 focus:z-10 focus:text-purple-700"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="mr-2 w-4 h-4 fill-current"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    ></svg>
+                    Gestion des taches
+                  </Link>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </nav>
 
-            <span class="mx-4">Curriculum vitae</span>
-          </router-link>
+        <nav class="mt-10 text-slate-500" v-if="user.type === 'user'">
+          <ul class="mt-12">
+            <li class="relative px-6 py-1">
+              <a
+                href="/"
+                class="router-link-active bg-purple-600 text-white inline-flex items-center w-full text-sm font-semibold transition duration-200 ease-in hover:bg-purple-800 hover:text-white py-2 px-2 rounded-lg"
+                aria-current="page"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  class="flex-shrink-0 h-6 w-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  ></path></svg
+                ><span class="ml-4">METAVOICE</span></a
+              >
+            </li>
+            <li class="relative px-6 py-1">
+              <button
+                class="inline-flex items-center w-full text-sm font-semibold transition duration-200 ease-in hover:bg-purple-500 hover:text-white py-2 px-2 rounded-lg"
+                @click="dropdown1 = !dropdown1"
+                aria-haspopup="true"
+              >
+                <span class="inline-flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"
+                    />
+                  </svg>
 
-          <router-link
-            class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 hover:bg-indigo-600 hover:text-white"
-            to="/tables"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802"
-              />
-            </svg>
+                  <span class="ml-4">Missions</span>
+                </span>
+              </button>
 
-            <span class="mx-4">Document translate</span>
-          </router-link>
-
-          <router-link
-            class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 hover:bg-indigo-600 hover:text-white"
-            to="/forms"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
-              />
-            </svg>
-
-            <span class="mx-4">App development</span>
-          </router-link>
-
-          <router-link
-            class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 hover:bg-indigo-600 hover:text-white"
-            to="/cards"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M12 18.75H4.5a2.25 2.25 0 01-2.25-2.25V9m12.841 9.091L16.5 19.5m-1.409-1.409c.407-.407.659-.97.659-1.591v-9a2.25 2.25 0 00-2.25-2.25h-9c-.621 0-1.184.252-1.591.659m12.182 12.182L2.909 5.909M1.5 4.5l1.409 1.409"
-              />
-            </svg>
-
-            <span class="mx-4">Interview training</span>
-          </router-link>
-
-          <router-link
-            class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4 hover:bg-indigo-600 hover:text-white"
-            to="/modal"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-              />
-            </svg>
-
-            <span class="mx-4">Graphisme & Design</span>
-          </router-link>
+              <div v-show="dropdown1">
+                <div class="w-48 bg-white rounded-lg border">
+                  <Link
+                    :href="route('indexWorkerTasks')"
+                    type="button"
+                    class="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium hover:bg-gray-100 hover:text-purple-700 focus:z-10 focus:text-purple-700"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="mr-2 w-4 h-4 fill-current"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    ></svg>
+                    En attente
+                  </Link>
+                </div>
+                <div class="w-48 bg-white rounded-lg border">
+                  <Link
+                    :href="route('Tasks')"
+                    type="button"
+                    class="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium hover:bg-gray-100 hover:text-purple-700 focus:z-10 focus:text-purple-700"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="mr-2 w-4 h-4 fill-current"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    ></svg>
+                    Validés
+                  </Link>
+                </div>
+              </div>
+            </li>
+          </ul>
         </nav>
       </div>
     </div>
 
     <div class="flex-1 flex flex-col overflow-hidden">
       <header
-        class="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-indigo-600"
+        class="z-10 py-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
       >
-        <div class="flex items-center">
+        <div
+          class="container flex items-center justify-between h-full px-6 mx-auto text-gray-600 dark:text-purple-300"
+        >
           <button
+            class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
+            aria-label="Menu"
             @click="isOpen = true"
-            class="text-gray-500 focus:outline-none lg:hidden"
           >
             <svg
               class="w-6 h-6"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
             >
               <path
-                d="M4 6H20M4 12H20M4 18H11"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
+                fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd"
+              ></path>
             </svg>
           </button>
-
-          <div class="relative mx-4 lg:mx-0">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-              <svg class="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
-
-            <input
-              class="w-32 pl-10 pr-4 text-indigo-600 border-gray-200 rounded-md sm:w-64 focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500"
-              type="text"
-              placeholder="Search"
-            />
-            <button
-              class="bg-transparent hover:bg-indigo-600 hover:text-white text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-            >
-              Go
-            </button>
-          </div>
-        </div>
-
-        <div class="flex items-center">
-          <div class="relative">
-            <button
-              @click="dropdownOpen = !dropdownOpen"
-              class="relative z-10 block w-8 h-8 overflow-hidden rounded-full shadow focus:outline-none"
-            >
-              <img
-                class="inline object-cover w-12 h-12 mr-2 rounded-full"
-                v-bind:src="'/uploads/user/' + user.profilePicture"
-                alt="Profile image"
-              />
-            </button>
-
-            <div
-              v-show="dropdownOpen"
-              @click="dropdownOpen = false"
-              class="fixed inset-0 z-10 w-full h-full"
-            ></div>
-
-            <transition
-              enter-active-class="transition duration-150 ease-out transform"
-              enter-from-class="scale-95 opacity-0"
-              enter-to-class="scale-100 opacity-100"
-              leave-active-class="transition duration-150 ease-in transform"
-              leave-from-class="scale-100 opacity-100"
-              leave-to-class="scale-95 opacity-0"
-            >
-              <div
-                v-show="dropdownOpen"
-                class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
-              >
-                <Link
-                  :href="route('profile.edit')"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white uppercase"
-                  >{{ user.name }}</Link
+          <div class="flex justify-center flex-1 lg:mr-32">
+            <div class="relative w-full max-w-xl mr-6 focus-within:text-purple-500">
+              <div class="absolute inset-y-0 flex items-center pl-2">
+                <svg
+                  class="w-4 h-4"
+                  aria-hidden="true"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
                 >
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
-                  >Products</a
-                >
-
-                <Link
-                  :href="route('logout')"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
-                  >Log out</Link
-                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
               </div>
-            </transition>
+              <form>
+                <input
+                  class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
+                  type="text"
+                  placeholder="Search for projects"
+                  aria-label="Search"
+                />
+              </form>
+            </div>
           </div>
+          <ul class="flex items-center flex-shrink-0 space-x-6">
+            <li class="flex">
+              <div class="relative" v-if="user.type === 'admin'">
+                <button
+                  @click="dropdownTeam = !dropdownTeam"
+                  class="relative z-10 block w-8 h-8 overflow-hidden rounded-full shadow focus:outline-none"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
+                    />
+                  </svg>
+                </button>
+
+                <transition
+                  enter-active-class="transition duration-150 ease-out transform"
+                  enter-from-class="scale-95 opacity-0"
+                  enter-to-class="scale-100 opacity-100"
+                  leave-active-class="transition duration-150 ease-in transform"
+                  leave-from-class="scale-100 opacity-100"
+                  leave-to-class="scale-95 opacity-0"
+                  @click="dropdownTeam = false"
+                >
+                  <div
+                    v-show="dropdownTeam"
+                    class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
+                  >
+                    <Link
+                      :href="route('adminTeam')"
+                      class="inline-flex items-center w-full text-sm font-semibold transition duration-200 ease-in hover:bg-purple-500 hover:text-white py-2 px-2 rounded-lg"
+                      >Team
+                    </Link>
+                  </div>
+                </transition>
+              </div>
+            </li>
+            <li class="relative" v-if="user.type === 'user'">
+              <div class="relative">
+                <button
+                  @click="
+                    dropdownOpenSkills = !dropdownOpenSkills;
+                    dropdownOpen = false;
+                  "
+                  class="relative bg-white-600 text-purple z-10 block overflow-hidden rounded-full shadow focus:outline-none"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"
+                    />
+                  </svg>
+                </button>
+
+                <div
+                  v-if="dropdownOpenSkills"
+                  @click="dropdownOpenSkills = !dropdownOpenSkills"
+                  class="fixed inset-0 z-10 w-full h-full"
+                ></div>
+
+                <transition
+                  enter-active-class="transition duration-150 ease-out transform"
+                  enter-from-class="scale-95 opacity-0"
+                  enter-to-class="scale-100 opacity-100"
+                  leave-active-class="transition duration-150 ease-in transform"
+                  leave-from-class="scale-100 opacity-100"
+                  leave-to-class="scale-95 opacity-0"
+                  @click="dropdownOpenSkills = false"
+                >
+                  <div
+                    v-show="dropdownOpenSkills"
+                    class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
+                  >
+                    <Link
+                      :href="route('skillAdd')"
+                      class="inline-flex items-center w-full text-sm font-semibold transition duration-200 ease-in hover:bg-purple-500 hover:text-white py-2 px-2 rounded-lg"
+                      >Gere vos competences</Link
+                    >
+
+                    <Link
+                      :href="route('skills')"
+                      class="inline-flex items-center w-full text-sm font-semibold transition duration-200 ease-in hover:bg-purple-500 hover:text-white py-2 px-2 rounded-lg"
+                      >Competences liste</Link
+                    >
+                  </div>
+                </transition>
+              </div>
+            </li>
+            <li class="relative">
+              <div class="relative">
+                <button
+                  @click="
+                    dropdownOpen = !dropdownOpen;
+                    dropdownOpenSkills = false;
+                  "
+                  class="relative z-10 block w-12 h-12 border-4 border-purple-600 overflow-hidden rounded-full shadow focus:outline-none"
+                >
+                  <img
+                    class="inline object-cover w-12 h-12 mr-2 rounded-full"
+                    v-bind:src="'/uploads/user/' + user.profilePicture"
+                    alt="Profile image"
+                  />
+                </button>
+
+                <div
+                  v-if="dropdownOpen && user.type === 'admin'"
+                  @click="dropdownOpen = !dropdownOpen"
+                  class="fixed inset-0 z-10 w-full h-full"
+                ></div>
+
+                <transition
+                  enter-active-class="transition duration-150 ease-out transform"
+                  enter-from-class="scale-95 opacity-0"
+                  enter-to-class="scale-100 opacity-100"
+                  leave-active-class="transition duration-150 ease-in transform"
+                  leave-from-class="scale-100 opacity-100"
+                  leave-to-class="scale-95 opacity-0"
+                  @click="dropdownOpen = false"
+                >
+                  <div
+                    v-show="dropdownOpen"
+                    class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
+                  >
+                    <Link
+                      :href="route('profile.edit')"
+                      class="inline-flex items-center w-full text-sm font-semibold transition duration-200 ease-in hover:bg-purple-500 hover:text-white py-2 px-2 rounded-lg"
+                      >{{ user.name }}</Link
+                    >
+                    <a
+                      href="#"
+                      class="inline-flex items-center w-full text-sm font-semibold transition duration-200 ease-in hover:bg-purple-500 hover:text-white py-2 px-2 rounded-lg"
+                      >Products</a
+                    >
+
+                    <Link
+                      :href="route('logout')"
+                      class="inline-flex items-center w-full text-sm font-semibold transition duration-200 ease-in hover:bg-purple-500 hover:text-white py-2 px-2 rounded-lg"
+                      >Déconnecter</Link
+                    >
+                  </div>
+                </transition>
+              </div>
+            </li>
+          </ul>
         </div>
       </header>
 
-      <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
-        <div class="container mx-auto">
+      <main class="h-full overflow-y-auto">
+        <div class="container px-6 mx-auto grid">
+          <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+            Tableau de bord
+          </h2>
+          <!-- CTA -->
+          <button
+            class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
+          >
+            <div class="flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                ></path>
+              </svg>
+              <span>Gerer votre teletravail</span>
+            </div>
+            <span>Lire le guide &RightArrow;</span>
+          </button>
+          <!-- Cards -->
+          <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+            <!-- Card -->
+          </div>
+
           <slot />
         </div>
       </main>

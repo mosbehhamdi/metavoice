@@ -24,7 +24,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'type',
-        'profilePicture'
+        'profile',
+        'profilePicture',
+        'available'
         
     ];
   
@@ -58,7 +60,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function type(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  ["user", "admin", "manager"][$value],
+            get: fn ($value) =>  ["user", "admin"][$value],
         );
     }
 

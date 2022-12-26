@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Redirect;
 
 use Inertia\Inertia;
 
@@ -23,9 +24,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Tasks');
     }
 
+
+
+ 
     /**
      * Show the application dashboard.
      *
@@ -33,7 +37,7 @@ class HomeController extends Controller
      */
     public function adminHome()
     {
-        return Inertia::render('DashboardAdmin');
+        return Inertia::render('Admin/Requests');
     }
 
     /**

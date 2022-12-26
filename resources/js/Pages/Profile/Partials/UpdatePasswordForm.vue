@@ -36,13 +36,13 @@ const updatePassword = () => {
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900">Update Password</h2>
-            <p class="mt-1 text-sm text-gray-600">Ensure your account is using a long, random password to stay secure.</p>
+            <h2 class="text-lg font-medium text-gray-900">Modifier mot de passe</h2>
+            <p class="mt-1 text-sm text-gray-600">Assurez-vous que votre compte utilise un mot de passe long et aléatoire pour rester en sécurité.</p>
         </header>
 
         <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="current_password" value="Current Password" />
+                <InputLabel for="current_password" value="Mot de passe actuel" />
                 <TextInput
                     id="current_password"
                     ref="currentPasswordInput"
@@ -55,7 +55,7 @@ const updatePassword = () => {
             </div>
 
             <div>
-                <InputLabel for="password" value="New Password" />
+                <InputLabel for="password" value="Nouveau mot de passe" />
                 <TextInput
                     id="password"
                     ref="passwordInput"
@@ -80,7 +80,8 @@ const updatePassword = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <Button           class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+ :disabled="form.processing">Save</Button>
                 <Transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
                     <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>
                 </Transition>

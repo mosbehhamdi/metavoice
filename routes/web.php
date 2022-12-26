@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SkillController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\FileController;
-use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +18,7 @@ use App\Http\Controllers\NotificationController;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -27,29 +29,50 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/route-cache', function() {
+Route::get('/route-cache', function () {
     return 'Routes cache cleared';
 });
 
-Route::get('/dashboard', function () {
-    return redirect()->route('file.upload');
+Route::get('/Tasks', function () {
+    return redirect()->route('indexTask');
 
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('Tasks');
 
-    Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-     Route::post('file-upload', [FileController::class, 'store'])->name('file.upload.store');
-     Route::any('deleteImage/{id}',[FileController::class,'destroy'])->name('deleteImage');
-     Route::get('file-upload', [FileController::class, 'index'])->name('file.upload');
+
+    Route::any('storeTask', [TaskController::class, 'storeTask'])->name('storeTask');
+    Route::any('deleteTask/{id}', [TaskController::class, 'destroyTask'])->name('deleteTask');
+    Route::get('indexTask', [TaskController::class, 'indexTask'])->name('indexTask');
+    Route::put('/updateTask', [TaskController::class, 'updateTask'])->name('updateTask');
+    Route::get('indexWorkerTasks', [TaskController::class, 'indexWorkerTasks'])->name('indexWorkerTasks');
 
 
-     Route::any('/sendPush', [NotificationController::class, 'push'])->name('sendPush');
-     
-     
-     Route::put('/updateImage', [FileController::class, 'update'])->name('updateImage');
+    Route::any('/sendPush', [NotificationController::class, 'push'])->name('sendPush');
+
+    Route::get('/test', [TaskController::class, 'test'])->name('testtest');
+    Route::get('/adminTeam', [AdminController::class, 'team'])->name('adminTeam');
+    Route::put('/skillsValidate', [AdminController::class, 'skillsValidate'])->name('skillsValidate');
+    Route::put('/workerUpdate', [AdminController::class, 'workerUpdate'])->name('workerUpdate');
+    Route::put('/filterTeleworkers', [AdminController::class, 'filterTeleworkers'])->name('filterTeleworkers');
+
+    Route::post('skill', [SkillController::class, 'store'])->name('skill.store');
+    Route::any('deleteSkill/{id}', [SkillController::class, 'destroy'])->name('deleteSkill');
+    Route::any('deleteSkillForever/{id}', [SkillController::class, 'deleteSkillForever'])->name('deleteSkillForever');
+
+    Route::get('skills', [SkillController::class, 'index'])->name('skills');
+    Route::get('skillAdd', [SkillController::class, 'skillAdd'])->name('skillAdd');
+    Route::get('workerSkills/{id}', [SkillController::class, 'workerSkills'])->name('workerSkills');
+    Route::put('validateSkills/', [SkillController::class, 'validateSkills'])->name('validateSkills');
+
+    Route::get('skillWorkers/{id}', [SkillController::class, 'skillWorkers'])->name('skillWorkers');
+
+    Route::post('disableSkill', [SkillController::class, 'disableSkill'])->name('disableSkill');
+
+    Route::post('enableSkill', [SkillController::class, 'enableSkill'])->name('enableSkill');
 
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
