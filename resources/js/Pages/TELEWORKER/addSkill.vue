@@ -10,7 +10,24 @@ const props = defineProps({
   skills: Array,
   allSkills: Array,
   msg: String,
+  user_id:Number,
 });
+
+let externalUserId = props.user_id; 
+
+OneSignal.push(function () {
+  OneSignal.setExternalUserId(externalUserId);
+});
+
+OneSignal.push(function () {
+  OneSignal.getExternalUserId().then(function (externalUserId) {
+    console.log("externalUserId: ", externalUserId);
+  });
+});
+
+
+
+
 
 const skill = useForm({
   label: "",

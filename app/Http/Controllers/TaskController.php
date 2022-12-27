@@ -61,12 +61,13 @@ class TaskController extends Controller
      * @return Response
      */
     public function storeTask(Request $request)
-    {
+    {  $admin_id = Auth::user()->id;
+        $worker = DB::table('users')->where('email', $request->emailWorker)->first();
          
-      
+                        $message = 'hey '. $worker->name.' !! Vous avez un nouveau tache de '.Auth::user()->name;
+
         if (auth()->user()->type == 'admin') {
-            $admin_id = Auth::user()->id;
-            $worker = DB::table('users')->where('email', $request->emailWorker)->first();
+          
     
             Validator::make($request->all(), [
                 'title' => ['required'],
@@ -82,10 +83,9 @@ class TaskController extends Controller
                 ]);
 
                 $fields = [
-                    "include_external_user_ids" => ["10"],
+                    "include_external_user_ids" => [strval($worker->id)],
                     "channel_for_external_user_ids" => "push",
                 ];
-                $message = 'hey !! Vous avez nouveau tache a determiner';
                 OneSignal::sendPush($fields, $message);
                 
             } else {
@@ -103,10 +103,9 @@ class TaskController extends Controller
             }
 
             $fields = [
-                "include_external_user_ids" => ["10"],
+                "include_external_user_ids" => [strval($worker->id)],
                 "channel_for_external_user_ids" => "push",
             ];
-            $message = 'hey !! Vous avez nouveau tache a determiner';
             OneSignal::sendPush($fields, $message);
 
         }

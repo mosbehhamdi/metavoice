@@ -15,14 +15,13 @@ class SkillController extends Controller
     public function index()
     {
 
-        $user_id = Auth::user()->id;
-
-        $skills = Skill::where('worker_id', '!=', $user_id)
+        if (auth()->user()->type == 'user') {
+            $user_id = Auth::user()->id;
+            $skills = Skill::where('worker_id', '!=', $user_id)
             ->groupBy('label')
             ->get();
 
-        if (auth()->user()->type == 'user') {
-            return Inertia::render('TELEWORKER/skills', compact('skills'));
+            return Inertia::render('TELEWORKER/skills', compact('skills','user_id'));
         }
     }
 
@@ -56,7 +55,7 @@ class SkillController extends Controller
 
         if (auth()->user()->type == 'user') {
             $user_id = Auth::user()->id;
-            return Inertia::render('TELEWORKER/addSkill', compact('skills'));
+            return Inertia::render('TELEWORKER/addSkill', compact('skills','user_id'));
         }
     }
     /**

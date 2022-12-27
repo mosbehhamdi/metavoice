@@ -243,9 +243,9 @@ function deleteSkillForever(id) {
       </Dialog>
     </TransitionRoot>
     <div class="space-y-4">
-      <div class="overflow-auto lg:overflow-visible">
+      <div class="w-full overflow-x-auto">
         <table
-          class="table text-gray-400 border-separate space-y-6 text-sm"
+          class="table text-gray-400 border-separate space-y-6 text-sm w-full"
           v-if="$page.props.teleworkers.length !== 0"
         >
           <thead class="bg-gray-800 text-gray-500">
