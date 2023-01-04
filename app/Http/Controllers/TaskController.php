@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Skill;
 use App\Models\Task;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,15 +15,17 @@ class TaskController extends Controller
 {
 
     public function indexTask()
-    {$skills = Skill::groupBy('label')->get();
+    {$skills = Skill::groupBy('label')
+            ->where("checked", "=", true)
+            ->get();
         $tasks = Task::all();
-         $id=auth()->user()->id;
+        $id = auth()->user()->id;
         if (auth()->user()->type == 'admin') {
             return Inertia::render('Admin/Tasks', compact('tasks', 'skills'));
 
         }
         if (auth()->user()->type == 'user') {
-            return Inertia::render('TELEWORKER/finished',compact('id'));
+            return Inertia::render('TELEWORKER/pending', compact('id'));
 
         }
     }
@@ -32,10 +33,9 @@ class TaskController extends Controller
     public function indexWorkerTasks()
     {
         $id = auth()->user()->id;
-        $workerTasks = Task::where("worker_id", "=",  $id)->get();
+        $workerTasks = Task::where("worker_id", "=", $id)->get();
 
-        return Inertia::render('TELEWORKER/pending',compact('id','workerTasks'));
-
+        return Inertia::render('TELEWORKER/pending', compact('id', 'workerTasks'));
 
     }
 
@@ -61,14 +61,17 @@ class TaskController extends Controller
      * @return Response
      */
     public function storeTask(Request $request)
-    {  $admin_id = Auth::user()->id;
+    {
+
+      
+
+        $admin_id = Auth::user()->id;
         $worker = DB::table('users')->where('email', $request->emailWorker)->first();
-         
-                        $message = 'hey '. $worker->name.' !! Vous avez un nouveau tache de '.Auth::user()->name;
+
+        $message = 'hey ' . $worker->name . ' !! Vous avez un nouveau tache de ' . Auth::user()->name;
 
         if (auth()->user()->type == 'admin') {
-          
-    
+
             Validator::make($request->all(), [
                 'title' => ['required'],
                 'description' => ['required'],
@@ -80,6 +83,8 @@ class TaskController extends Controller
                     'description' => $request->description,
                     'admin_id' => $admin_id,
                     'worker_id' => $worker->id,
+                    'name' => 'noFile',
+                    'hasFile' => false,
                 ]);
 
                 $fields = [
@@ -87,7 +92,7 @@ class TaskController extends Controller
                     "channel_for_external_user_ids" => "push",
                 ];
                 OneSignal::sendPush($fields, $message);
-                
+
             } else {
                 $fileName = time() . '.' . $request->file->extension();
                 $request->file->move(public_path('uploads'), $fileName);
@@ -98,6 +103,7 @@ class TaskController extends Controller
                     'name' => $fileName,
                     'admin_id' => $admin_id,
                     'worker_id' => $worker->id,
+                    'hasFile' => true,
 
                 ]);
             }
@@ -109,7 +115,14 @@ class TaskController extends Controller
             OneSignal::sendPush($fields, $message);
 
         }
+
+
     
+        
+        $worker->update([
+            'available' => false,
+        ]);
+
 
     }
 

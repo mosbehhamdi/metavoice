@@ -8,6 +8,17 @@ const props = defineProps({
   status: String,
 });
 const user = usePage().props.value.auth.user;
+
+let externalUserId = user.id; // You will supply the external user id to the OneSignal SDK
+
+OneSignal.push(function () {
+  OneSignal.setExternalUserId(externalUserId);
+});
+OneSignal.push(function () {
+  OneSignal.getExternalUserId().then(function (externalUserId) {
+    console.log("externalUserId: ", externalUserId);
+  });
+});
 const form = useForm({
   name: user.name,
   email: user.email,
@@ -197,39 +208,7 @@ const dropdownOpenSkills = ref(false);
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
                     ></svg>
-                    En attente
-                  </Link>
-                </div>
-                <div class="w-48 bg-white rounded-lg border">
-                  <Link
-                    :href="route('Tasks')"
-                    type="button"
-                    class="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium hover:bg-gray-100 hover:text-purple-700 focus:z-10 focus:text-purple-700"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="mr-2 w-4 h-4 fill-current"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    ></svg>
-                    Validés
-                  </Link>
-                </div>
-                        <div class="w-48 bg-white rounded-lg border">
-                  <Link
-                    :href="route('Tasks')"
-                    type="button"
-                    class="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium hover:bg-gray-100 hover:text-purple-700 focus:z-10 focus:text-purple-700"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="mr-2 w-4 h-4 fill-current"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    ></svg>
-                    Envoyé
+                    Reçus
                   </Link>
                 </div>
               </div>
@@ -329,7 +308,7 @@ const dropdownOpenSkills = ref(false);
                     <Link
                       :href="route('adminTeam')"
                       class="inline-flex items-center w-full text-sm font-semibold transition duration-200 ease-in hover:bg-purple-500 hover:text-white py-2 px-2 rounded-lg"
-                      >Team
+                      >Equipe
                     </Link>
                   </div>
                 </transition>
@@ -405,7 +384,7 @@ const dropdownOpenSkills = ref(false);
                 >
                   <img
                     class="inline object-cover w-12 h-12 mr-2 rounded-full"
-                    v-bind:src="'/uploads/user/' + user.profilePicture"
+                    v-bind:src="'/uploads/' + user.profilePicture"
                     alt="Profile image"
                   />
                 </button>

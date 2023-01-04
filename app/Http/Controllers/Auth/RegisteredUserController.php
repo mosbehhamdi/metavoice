@@ -32,6 +32,14 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+
+
+
+
+
+
+     
     public function store(Request $request)
     {
         $request->validate([
@@ -40,7 +48,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         $fileName = time() . '.' . $request->file->extension();
-        $request->file->move(public_path('uploads/user'), $fileName);
+        $request->file->move(public_path('uploads/'), $fileName);
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -53,5 +61,16 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+
+
+
+
+    public function destroy($id)
+    {
+        $worker = User::find($id);
+        $worker->delete();
+
     }
 }

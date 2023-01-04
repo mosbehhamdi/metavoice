@@ -106,12 +106,11 @@ const submit = () => {
                 />
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
               </div>
-             
-             
+
               <div class="mt-4">
                 <label
-                
-                  class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                  v-if="form.file === null"
+                  class="underline underline-offset-2 font-medium leading-tight text-base mt-0 mb-2 text-blue-600"
                   for="file"
                 >
                   <input
@@ -123,14 +122,26 @@ const submit = () => {
                     autofocus
                     accept=".png, .jpg, .jpeg"
                   />
-                 
 
-                  Upload image
+                  Ajouter photo de profil
                 </label>
-               
+                <label
+                  v-else
+                  class="underline underline-offset-2 font-medium leading-tight text-base mt-0 mb-2 text-blue-600"
+                  for="file"
+                >
+                  <input
+                    id="file"
+                    type="file"
+                    hidden
+                    @input="form.file = $event.target.files[0]"
+                    autofocus
+                  />
+
+                  {{ form.file.name }}
+                </label>
               </div>
 
-             
               <!-- You should use a button here, as the anchor is only used for the example  -->
               <button
                 class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"

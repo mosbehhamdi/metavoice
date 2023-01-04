@@ -12,13 +12,14 @@
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Scripts -->
-        <script src="https://unpkg.com/@ionic/core@0.0.2-30/dist/ionic.js"></script>
+        <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
+
         <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
 <script>
   window.OneSignal = window.OneSignal || [];
   OneSignal.push(function() {
     OneSignal.init({
-      appId: "adff7998-f842-4b3c-b007-fad6a3f5082f",
+      appId: "4cf075ac-0b6c-483c-a85c-465acc0933ce",
     });
   });
 </script>

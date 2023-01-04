@@ -112,7 +112,7 @@ defineProps({
                       <Link
                         :href="route('Tasks')"
                         class="px-6 py-3 text-sm font-medium text-purple-900 capitalize transition-colors duration-300 bg-white rounded-lg hover:bg-purple-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-purple-100"
-                        >Dashboard</Link
+                        >Tableau de bord</Link
                       >
                     </div>
                     <div

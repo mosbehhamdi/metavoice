@@ -5,6 +5,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskResponceController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -49,6 +51,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/updateTask', [TaskController::class, 'updateTask'])->name('updateTask');
     Route::get('indexWorkerTasks', [TaskController::class, 'indexWorkerTasks'])->name('indexWorkerTasks');
 
+    Route::post('storeTaskResp', [TaskResponceController::class, 'store'])->name('storeTaskResp');
+    Route::get('taskResponses/{id}', [TaskResponceController::class, 'index'])->name('taskResponses');
+    
+    Route::get('taskResponsesAdmin/{id}', [TaskResponceController::class, 'indexAdmin'])->name('taskResponsesAdmin');
+
 
     Route::any('/sendPush', [NotificationController::class, 'push'])->name('sendPush');
 
@@ -57,7 +64,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/skillsValidate', [AdminController::class, 'skillsValidate'])->name('skillsValidate');
     Route::put('/workerUpdate', [AdminController::class, 'workerUpdate'])->name('workerUpdate');
     Route::put('/filterTeleworkers', [AdminController::class, 'filterTeleworkers'])->name('filterTeleworkers');
+    Route::delete('/destroyTeleworker/{id}', [RegisteredUserController::class, 'destroy'])->name('destroyTeleworker');
 
+    
     Route::post('skill', [SkillController::class, 'store'])->name('skill.store');
     Route::any('deleteSkill/{id}', [SkillController::class, 'destroy'])->name('deleteSkill');
     Route::any('deleteSkillForever/{id}', [SkillController::class, 'deleteSkillForever'])->name('deleteSkillForever');

@@ -13,17 +13,21 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('task_responces', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
             $table->string('name')->nullable();
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->integer('admin_id');
             $table->integer('worker_id');
-            $table->boolean('hasFile');
-            $table->boolean('completed')->default(false);
+            $table->integer('task_id');
+            $table->string('andminName')->nullable();
+            $table->string('andminPhoto')->nullable();
+            $table->string('taskTitle')->nullable();
+        
+
+
+
             $table->timestamps();
-            
         });
     }
 
@@ -34,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('task_responces');
     }
 };

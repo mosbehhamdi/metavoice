@@ -3,13 +3,17 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/inertia-vue3";
 import { ref } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
+import { useToast } from "tailvue";
+
+const $toast = useToast();
 
 const props = defineProps({
   skills: Array,
-  user_id:Number,
+  user_id: Number,
+  existedSkill: Boolean,
 });
 
-let externalUserId = props.user_id; 
+let externalUserId = props.user_id;
 
 OneSignal.push(function () {
   OneSignal.setExternalUserId(externalUserId);
@@ -21,10 +25,6 @@ OneSignal.push(function () {
   });
 });
 
-
-
-
-
 function changeSkill(e, id) {
   if (e.target.checked) {
     axios.post("http://127.0.0.1:8000/enableSkill/", {
@@ -35,6 +35,14 @@ function changeSkill(e, id) {
       skillId: id,
     });
   }
+}
+
+if (props.existedSkill == true) {
+  $toast.show({
+    type: "warning",
+    message: "Déja existe, activer parmis la liste",
+    timeout: 6,
+  });
 }
 </script>
 
@@ -56,6 +64,7 @@ function changeSkill(e, id) {
             >Ajout des nouvelles</Link
           >
         </h6>
+
         <div>
           <form action="" class="space-y-3 space-x-5">
             <ul>
@@ -66,9 +75,13 @@ function changeSkill(e, id) {
                     :id="skill.id"
                     class="sr-only peer"
                     v-on:change="changeSkill($event, skill.id)"
-                    v-if="skill.activated"
+                    v-if="
+                      (skill.activated && $page.props.user_id == skill.worker_id) ||
+                      $page.props.user_id == skill.preceiver_id
+                    "
                     checked
                   />
+
                   <input
                     type="checkbox"
                     :id="skill.id"

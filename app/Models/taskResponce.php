@@ -5,13 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-class Task extends Model
+
+class taskResponce extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title', 'name','description','admin_id','completed','worker_id','hasFile'
+         'name','description','admin_id','worker_id','task_id','andminName','andminPhoto','taskTitle'
     ];
   
+
+
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d h:i:s', // Change your format
+        'updated_at' => 'datetime:Y-m-d h:i:s',
+        
+
+    ];
     /**
      * Get the user's first name.
      *
