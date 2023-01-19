@@ -132,20 +132,17 @@ function deleteSkillForever(id) {
                 class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
               >
                 <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
-                  Modifier
+                  Status
                 </DialogTitle>
                 <div class="mt-2">
                   <form @submit.prevent="submitUpdate">
-                    <select
+                    <input
+                      id="status"
+                      class="block rounded w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-500 focus:outline-none focus:shadow-outline-purple-600 dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                      placeholder="Saisir le status ici"
                       v-model="formUpdate.status"
-                      id="underline_select"
-                      class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-                    >
-                      <option value="graphist">Graphist</option>
-                      <option value="comptable">Comptable</option>
-                      <option value="developpeur">Developpeur</option>
-                    </select>
-                    <div class="mt-4">
+                    />
+                    <div class="mt-4 space-x-3">
                       <button
                         type="submit"
                         class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
@@ -279,7 +276,6 @@ function deleteSkillForever(id) {
             <tr>
               <th class="p-3 rounded">Teleworker</th>
               <th class="p-3 text-left rounded">Status</th>
-              <th class="p-3 text-left rounded">NB Taches</th>
               <th class="p-3 text-left rounded">Status</th>
               <th class="p-3 text-left rounded">Action</th>
             </tr>
@@ -307,10 +303,14 @@ function deleteSkillForever(id) {
                   <p>{{ worker.profile }}</p>
                 </div>
               </td>
-              <td class="p-3 rounded" v-else>aucun status</td>
-              <td class="p-3 font-bold rounded">200.00$</td>
+              <td class="p-3 rounded" v-else>Aucun status</td>
               <td class="p-3 rounded">
-                <span class="bg-green-400 text-gray-50 rounded-md px-2">available</span>
+                <span
+                  class="bg-green-400 text-gray-50 rounded-md px-2"
+                  v-if="worker.available"
+                  >Disponible</span
+                >
+                <span class="bg-red-400 text-gray-50 rounded-md px-2" v-else>Occupé</span>
               </td>
               <td class="p-3 rounded">
                 <button
@@ -326,8 +326,19 @@ function deleteSkillForever(id) {
                   @click="openModalUpdate(worker.id)"
                   class="text-gray-400 hover:text-gray-100 mr-2"
                 >
-                  <i class="material-icons mx-2" style="font-size: 30px"> edit</i>
+                  <i
+                    class="material-icons mx-2"
+                    style="font-size: 30px"
+                    v-if="worker.profile !== null"
+                  >
+                    edit</i
+                  >
+
+                  <i v-else class="material-icons mx-2" style="font-size: 30px">
+                    add_circle</i
+                  >
                 </button>
+
                 <button
                   @click="openDeleteModal(worker.id)"
                   class="text-gray-400 hover:text-gray-100 mr-2"

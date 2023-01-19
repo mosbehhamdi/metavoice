@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Ladumor\OneSignal\OneSignal;
+use App\Models\User;
+use App\Models\taskResponce;
 
 class TaskController extends Controller
 {
@@ -30,6 +32,41 @@ class TaskController extends Controller
         }
     }
 
+
+    public function indexAdminRespondedTask()
+    {
+        $tasks = Task::where("status", "=", "Repondu")->get();
+        if (auth()->user()->type == 'admin') {
+            return Inertia::render('Admin/Responded', compact('tasks'));
+
+        }
+        
+    }
+
+
+    public function indexAdminValidTask()
+    {
+        $tasks = Task::where("status", "=", "Validé")->get();
+        if (auth()->user()->type == 'admin') {
+            return Inertia::render('Admin/validTasks', compact('tasks'));
+
+        }
+        
+    }
+
+    
+    public function indexAdminToResolveTask()
+    {
+        $tasks = Task::where("status", "=", "A corrigé")->get();
+        if (auth()->user()->type == 'admin') {
+            return Inertia::render('Admin/toResolve', compact('tasks'));
+
+        }
+        
+    }
+
+
+
     public function indexWorkerTasks()
     {
         $id = auth()->user()->id;
@@ -39,9 +76,65 @@ class TaskController extends Controller
 
     }
 
+
+    public function indexWorkerRespondedTask()
+    {
+        $id = auth()->user()->id;
+
+        $tasks = Task::where("status", "=", "Repondu")
+        ->where("worker_id", "=", $id)
+        ->get();
+            return Inertia::render('TELEWORKER/respondedTasks', compact('tasks'));
+
+        
+        
+    }
+
+    public function indexWorkerToResolveTask()
+    {
+        $id = auth()->user()->id;
+
+        $tasks = Task::where("status", "=", "A corrigé")
+        ->where("worker_id", "=", $id)
+        ->get();
+            return Inertia::render('TELEWORKER/toResolveTasks', compact('tasks'));
+
+        
+        
+    }
+
+    public function indexWorkerValidTask()
+    {
+        $id = auth()->user()->id;
+
+        $tasks = Task::where("status", "=", "Validé")
+        ->where("worker_id", "=", $id)
+        ->get();
+            return Inertia::render('TELEWORKER/validTasks', compact('tasks'));
+
+        
+        
+    }
+
+
     public function test()
     {
     }
+
+
+    public function tagAsValidTask($respId)
+    {
+        $resp = taskResponce::findOrFail($respId);
+        $task = Task::findOrFail($resp->task_id);
+        
+        $task->update([
+            'status' => 'Validé',
+        ]);
+
+    }
+
+
+
 
     public function updateTask(Request $request)
     {
@@ -62,10 +155,7 @@ class TaskController extends Controller
      */
     public function storeTask(Request $request)
     {
-
-      
-
-        $admin_id = Auth::user()->id;
+        $admin = Auth::user();
         $worker = DB::table('users')->where('email', $request->emailWorker)->first();
 
         $message = 'hey ' . $worker->name . ' !! Vous avez un nouveau tache de ' . Auth::user()->name;
@@ -81,10 +171,14 @@ class TaskController extends Controller
                 Task::create([
                     'title' => $request->title,
                     'description' => $request->description,
-                    'admin_id' => $admin_id,
+                    'admin_id' => $admin->id,
                     'worker_id' => $worker->id,
                     'name' => 'noFile',
                     'hasFile' => false,
+                    'adminName' =>$admin->name,
+                    'adminPhoto' =>  $admin->profilePicture,
+                    'workerName' => $worker->name,
+                    'workerPhoto' => $worker->profilePicture,
                 ]);
 
                 $fields = [
@@ -101,9 +195,13 @@ class TaskController extends Controller
                     'title' => $request->title,
                     'description' => $request->description,
                     'name' => $fileName,
-                    'admin_id' => $admin_id,
+                    'admin_id' => $admin->id,
                     'worker_id' => $worker->id,
                     'hasFile' => true,
+                    'adminName' =>$admin->name,
+                    'adminPhoto' =>  $admin->profilePicture,
+                    'workerName' => $worker->name,
+                    'workerPhoto' => $worker->profilePicture,
 
                 ]);
             }
@@ -114,15 +212,18 @@ class TaskController extends Controller
             ];
             OneSignal::sendPush($fields, $message);
 
+
+            $user = User::where('email', '=', $request->emailWorker)->first();
+            $user->available = false;
+            $user->save();
+
+
         }
 
 
     
         
-        $worker->update([
-            'available' => false,
-        ]);
-
+      
 
     }
 

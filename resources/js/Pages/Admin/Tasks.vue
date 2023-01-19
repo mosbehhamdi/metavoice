@@ -16,20 +16,62 @@ import { useToast, useModal } from "tailvue";
 import moment from "moment";
 
 const isOpenMShow = ref(false);
+const isOpenRespValidate = ref(false);
+const isOpenRespResolve = ref(false);
+
+const respResolveId = ref(0);
+const respResolveDescription = ref("");
+
 var seeTaskResponces = ref(false);
 var taskResponses = ref([]);
 
 function openTaskResponses(id) {
   axios.get("http://127.0.0.1:8000/taskResponsesAdmin/" + id).then((response) => {
     taskResponses.value = response.data;
+
+    if (taskResponses.value.length == 0) {
+      seeTaskResponces.value = false;
+      $toast.show({
+        type: "warning",
+        message: "Aucune réponse",
+        timeout: 3,
+      });
+    } else {
+      seeTaskResponces.value = true;
+    }
   });
-  seeTaskResponces.value = true;
 }
 
 function closeModalShow() {
   isOpenMShow.value = false;
 }
+function closeModalRespValidate() {
+  isOpenRespValidate.value = false;
+}
 
+function openModalRespValidate(respId) {
+  axios.put("http://127.0.0.1:8000/tagAsValidTask/" + respId);
+
+  isOpenRespValidate.value = true;
+}
+
+function sendResolvingDescription() {
+  axios.post("http://127.0.0.1:8000/sendResolvingDescription/", {
+    respId: respResolveId.value,
+    respDescription: respResolveDescription.value,
+  });
+
+  isOpenRespResolve.value = false;
+}
+
+function closeModalRespResolve() {
+  isOpenRespResolve.value = false;
+}
+
+function openModalRespResolve(respId) {
+  respResolveId.value = respId;
+  isOpenRespResolve.value = true;
+}
 const $toast = useToast();
 const $modal = useModal();
 
@@ -70,6 +112,12 @@ const zoomFrameFile = ref(false);
 const taskTitle = ref("");
 const taskDescription = ref("");
 const taskName = ref("");
+const taskStatus = ref("");
+const taskAdminPhoto = ref("");
+const taskAdminName = ref("");
+const taskWorkerPhoto = ref("");
+const taskWorkerName = ref("");
+
 var hasFile = ref(true);
 
 const showTaskPage = ref(false);
@@ -130,11 +178,27 @@ function getFormattedDate(date) {
   return moment(date).format("HH:MM");
 }
 
-function showTask(name, title, description, HF) {
+function showTask(
+  name,
+  title,
+  description,
+  HF,
+  status,
+  adminName,
+  adminPhoto,
+  workerName,
+  workerPhoto
+) {
   this.taskName = name;
   this.taskTitle = title;
   this.taskDescription = description;
   this.hasFile = HF;
+  this.taskStatus = status;
+  this.taskAdminName = adminName;
+  this.taskAdminPhoto = adminPhoto;
+  this.taskWorkerName = workerName;
+  this.taskWorkerPhoto = workerPhoto;
+
   if (HF) {
     showEditPage.value = false;
     showTaskPage.value = true;
@@ -204,8 +268,9 @@ function downloadWithAxios(url, title) {
   <Head title="Profile" />
   <AuthenticatedLayout>
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight">Taches</h2>
     </template>
+    <!-- show text Task -->
     <TransitionRoot appear :show="isOpenMShow" as="template">
       <Dialog as="div" @close="closeModalShow" class="relative z-10">
         <TransitionChild
@@ -251,6 +316,131 @@ function downloadWithAxios(url, title) {
                     @click="closeModalShow"
                   >
                     Je l'ai Merci !
+                  </button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
+    <!-- show resp resolve -->
+    <TransitionRoot appear :show="isOpenRespResolve" as="template">
+      <Dialog as="div" @close="closeModalRespResolve" class="relative z-10">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel
+                class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              >
+                <DialogTitle
+                  as="h3"
+                  class="text-lg font-medium leading-6 text-gray-900 break-words uppercase"
+                >
+                </DialogTitle>
+                <div class="mt-2">
+                  <form>
+                    <textarea
+                      id="description"
+                      class="block rounded w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-blue-500 focus:outline-none focus:shadow-outline-purple-600 dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                      placeholder="Ajouter des instructions"
+                      v-model="respResolveDescription"
+                    />
+                  </form>
+                </div>
+                <div class="mt-4 space-x-2">
+                  <button
+                    type="button"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    @click="sendResolvingDescription"
+                  >
+                    Confirmer
+                  </button>
+                  <button
+                    type="button"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    @click="closeModalRespResolve"
+                  >
+                    Annuler
+                  </button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
+
+    <!-- show resp validate -->
+    <TransitionRoot appear :show="isOpenRespValidate" as="template">
+      <Dialog as="div" @close="closeModalRespValidate" class="relative z-10">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black bg-opacity-25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel
+                class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              >
+                <DialogTitle
+                  as="h3"
+                  class="text-lg font-medium leading-6 text-gray-900 break-words"
+                >
+                  Etes vous sur de vouloir valider ce tache
+                </DialogTitle>
+
+                <div class="mt-4 space-x-2">
+                  <button
+                    type="button"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                    @click="closeModalRespValidate"
+                  >
+                    Confirmer
+                  </button>
+                  <button
+                    type="button"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    @click="closeModalRespValidate"
+                  >
+                    Annuler
                   </button>
                 </div>
               </DialogPanel>
@@ -372,7 +562,6 @@ function downloadWithAxios(url, title) {
           />
         </svg>
       </button>
-
       <TransitionRoot appear :show="isOpen" as="template">
         <Dialog as="div" class="relative z-10">
           <TransitionChild
@@ -627,13 +816,18 @@ function downloadWithAxios(url, title) {
               <div v-if="$page.props.tasks.length !== 0">
                 <div class="w-full overflow-hidden rounded-lg shadow-xs">
                   <div class="w-full overflow-x-auto">
+                    <h6
+                      class="font-medium leading-tight text-base mt-0 mb-2 text-blue-600"
+                    >
+                      Envoyés
+                    </h6>
+
                     <table class="w-screen">
                       <thead>
                         <tr
                           class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
                         >
-                          <th class="px-4 py-3">Title</th>
-                          <th class="px-4 py-3">Status</th>
+                          <th class="px-4 py-3">Titre</th>
                           <th class="px-4 py-3">Date</th>
                           <th class="px-4 py-3">Reponses</th>
 
@@ -648,20 +842,6 @@ function downloadWithAxios(url, title) {
                           v-for="task in tasks"
                         >
                           <td class="px-4 py-3 text-sm">{{ task.title }}</td>
-                          <td class="px-4 py-3 text-xs">
-                            <span
-                              v-if="task.completed"
-                              class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
-                            >
-                              Repondu
-                            </span>
-                            <span
-                              v-else
-                              class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
-                            >
-                              En attente
-                            </span>
-                          </td>
 
                           <td class="px-4 py-3 text-sm">
                             {{ task.created_at.substring(0, 10) }}
@@ -700,7 +880,12 @@ function downloadWithAxios(url, title) {
                                     task.name,
                                     task.title,
                                     task.description,
-                                    task.hasFile
+                                    task.hasFile,
+                                    task.status,
+                                    task.adminName,
+                                    task.adminPhoto,
+                                    task.workerName,
+                                    task.workerPhoto
                                   )
                                 "
                                 class="font-medium text-green-600 dark:text-green-500 hover:underline"
@@ -816,6 +1001,7 @@ function downloadWithAxios(url, title) {
           </form>
         </div>
       </div>
+
       <div v-else-if="!showEditPage && !showTaskPage && seeTaskResponces">
         <div v-if="seeTaskResponces">
           <button
@@ -878,7 +1064,7 @@ function downloadWithAxios(url, title) {
                     class="flex items-center justify-between leading-tight p-2 md:p-4"
                   >
                     <p class="text-grey-darker text-sm">
-                      <span class="text-slate-500">Rependu le </span>
+                      <span class="text-slate-500">Repondu le </span>
 
                       {{ resp.created_at.substring(0, 10) }}
                     </p>
@@ -898,12 +1084,74 @@ function downloadWithAxios(url, title) {
                       <img
                         alt="Placeholder"
                         class="block rounded-full w-6 h-6"
-                        v-bind:src="resp.andminPhoto"
+                        v-bind:src="resp.workerPhoto"
                       />
-                      <p class="ml-2 text-sm">De {{ resp.andminName }}</p>
+                      <p class="ml-2 text-sm">De {{ resp.workerName }}</p>
                     </a>
-                    <a class="no-underline text-grey-darker hover:text-red-dark" href="#">
-                      <span class="hidden">Like</span>
+                    <a
+                      class="no-underline space-x-1 text-grey-darker hover:text-red-dark"
+                      href="#"
+                    >
+                      <button
+                        @click="downloadWithAxios(resp.name, resp.id)"
+                        class="text-white rounded-full"
+                        type="button"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="w-6 h-6 bg-blue-900 rounded-full"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        @click="openModalRespResolve(resp.id)"
+                        class="text-white rounded-full"
+                        type="button"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="w-6 h-6 bg-blue-500 rounded-full"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        @click="openModalRespValidate(resp.id)"
+                        class="text-white rounded-full"
+                        type="button"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="w-6 h-6 bg-green-500 rounded-full"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </button>
                     </a>
                   </footer>
                 </article>
@@ -974,28 +1222,17 @@ function downloadWithAxios(url, title) {
                   </div>
                 </div>
                 <div class="flex items-center" v-else>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-6 h-6"
+                  <a
+                    class="flex items-center no-underline hover:underline text-black"
+                    href="#"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                    <img
+                      alt="Placeholder"
+                      class="block rounded-full w-6 h-6"
+                      v-bind:src="'/uploads/' + taskWorkerPhoto"
                     />
-                  </svg>
-
-                  <div class="text-sm">
-                    <span
-                      class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600"
-                    >
-                      Pending Request
-                    </span>
-                  </div>
+                    <p class="ml-2 text-sm">A {{ taskWorkerName }}</p>
+                  </a>
                 </div>
               </div>
             </div>
@@ -1071,28 +1308,17 @@ function downloadWithAxios(url, title) {
                     </div>
                   </div>
                   <div class="flex items-center" v-else>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-6 h-6"
+                    <a
+                      class="flex items-center no-underline hover:underline text-black"
+                      href="#"
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                      <img
+                        alt="Placeholder"
+                        class="block rounded-full w-6 h-6"
+                        v-bind:src="'/uploads/' + taskWorkerPhoto"
                       />
-                    </svg>
-
-                    <div class="text-sm">
-                      <span
-                        class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600"
-                      >
-                        Pending Request
-                      </span>
-                    </div>
+                      <p class="ml-2 text-sm">A {{ taskWorkerName }}</p>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -1143,29 +1369,19 @@ function downloadWithAxios(url, title) {
                       <p class="text-gray-600">Aug 18</p>
                     </div>
                   </div>
-                  <div class="flex items-center" v-else>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-6 h-6"
+                  <div class="flex items-center space-x-3" v-else>
+                    <a
+                      class="flex items-center no-underline hover:underline text-black"
+                      href="#"
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                      <img
+                        alt="Placeholder"
+                        class="block rounded-full w-6 h-6"
+                        v-bind:src="'/uploads/' + taskWorkerPhoto"
                       />
-                    </svg>
+                      <p class="ml-2 text-sm">A {{ taskWorkerName }}</p>
+                    </a>
 
-                    <div class="text-sm">
-                      <span
-                        class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600"
-                      >
-                        Pending Request
-                      </span>
-                    </div>
                     <div class="text-sm">
                       <button
                         class="router-link-active bg-purple-600 text-white inline-flex w-10 text-sm font-semibold transition duration-200 ease-in hover:bg-purple-800 hover:text-white py-2 px-2 rounded-lg"

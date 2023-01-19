@@ -118,7 +118,7 @@ const dropdownOpenSkills = ref(false);
                     />
                   </svg>
 
-                  <span class="ml-4">Flux de travail</span>
+                  <span class="ml-4">Gestion des taches</span>
                 </span>
               </button>
 
@@ -136,8 +136,60 @@ const dropdownOpenSkills = ref(false);
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
                     ></svg>
-                    Gestion des taches
+                    Envoyés
                   </Link>
+                </div>
+                <div class="w-48 bg-white rounded-lg border">
+                  <Link
+                    :href="route('indexAdminRespondedTask')"
+                    type="button"
+                    class="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium hover:bg-gray-100 hover:text-purple-700 focus:z-10 focus:text-purple-700"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="mr-2 w-4 h-4 fill-current"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    ></svg>
+                    Repondu
+                  </Link>
+                  <div v-show="dropdown1">
+                    <div class="w-48 bg-white rounded-lg border">
+                      <Link
+                        :href="route('indexAdminToResolveTask')"
+                        type="button"
+                        class="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium hover:bg-gray-100 hover:text-purple-700 focus:z-10 focus:text-purple-700"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="mr-2 w-4 h-4 fill-current"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                        A corriger
+                      </Link>
+                    </div>
+                  </div>
+                  <div v-show="dropdown1">
+                    <div class="w-48 bg-white rounded-lg border">
+                      <Link
+                        :href="route('indexAdminValidTask')"
+                        type="button"
+                        class="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium hover:bg-gray-100 hover:text-purple-700 focus:z-10 focus:text-purple-700"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="mr-2 w-4 h-4 fill-current"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                        Validé
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
             </li>
@@ -208,8 +260,63 @@ const dropdownOpenSkills = ref(false);
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
                     ></svg>
-                    Reçus
+                    En attente
                   </Link>
+                </div>
+              </div>
+
+              <div v-show="dropdown1">
+                <div class="w-48 bg-white rounded-lg border">
+                  <Link
+                    :href="route('indexWorkerRespondedTask')"
+                    type="button"
+                    class="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium hover:bg-gray-100 hover:text-purple-700 focus:z-10 focus:text-purple-700"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="mr-2 w-4 h-4 fill-current"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    ></svg>
+                    Repondu
+                  </Link>
+                  <div v-show="dropdown1">
+                    <div class="w-48 bg-white rounded-lg border">
+                      <Link
+                        :href="route('indexWorkerToResolveTask')"
+                        type="button"
+                        class="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium hover:bg-gray-100 hover:text-purple-700 focus:z-10 focus:text-purple-700"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="mr-2 w-4 h-4 fill-current"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                        A corriger
+                      </Link>
+                    </div>
+                  </div>
+                  <div v-show="dropdown1">
+                    <div class="w-48 bg-white rounded-lg border">
+                      <Link
+                        :href="route('indexWorkerValidTask')"
+                        type="button"
+                        class="inline-flex relative items-center py-2 px-4 w-full text-sm font-medium hover:bg-gray-100 hover:text-purple-700 focus:z-10 focus:text-purple-700"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="mr-2 w-4 h-4 fill-current"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                        Validé
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
             </li>
@@ -263,7 +370,7 @@ const dropdownOpenSkills = ref(false);
                 <input
                   class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
                   type="text"
-                  placeholder="Search for projects"
+                  placeholder="recherche"
                   aria-label="Search"
                 />
               </form>
@@ -434,9 +541,6 @@ const dropdownOpenSkills = ref(false);
 
       <main class="h-full overflow-y-auto">
         <div class="container px-6 mx-auto grid">
-          <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Tableau de bord
-          </h2>
           <!-- CTA -->
           <button
             class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"
@@ -449,12 +553,7 @@ const dropdownOpenSkills = ref(false);
               </svg>
               <span>Gerer votre teletravail</span>
             </div>
-            <span>Lire le guide &RightArrow;</span>
           </button>
-          <!-- Cards -->
-          <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
-            <!-- Card -->
-          </div>
 
           <slot />
         </div>

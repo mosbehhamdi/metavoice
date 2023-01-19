@@ -52,6 +52,12 @@ const taskDescription = ref("");
 const taskId = ref(0);
 const zoomFrameFile = ref(false);
 
+const taskStatus = ref("");
+const taskAdminPhoto = ref("");
+const taskAdminName = ref("");
+const taskWorkerPhoto = ref("");
+const taskWorkerName = ref("");
+
 var hasFile = ref(false);
 var taskResponses = ref([]);
 var seeTaskResponces = ref(false);
@@ -78,27 +84,40 @@ function getFormattedDate(date) {
 function openTaskResponses(id) {
   axios.get("http://127.0.0.1:8000/taskResponses/" + id).then((response) => {
     taskResponses.value = response.data;
+    if (taskResponses.value.length == 0) {
+      seeTaskResponces.value = false;
+      $toast.show({
+        type: "warning",
+        message: "Aucune réponse",
+        timeout: 3,
+      });
+    } else {
+      seeTaskResponces.value = true;
+    }
   });
-  seeTaskResponces.value = true;
 }
 
-let externalUserId = props.id; // You will supply the external user id to the OneSignal SDK
-
-OneSignal.push(function () {
-  OneSignal.setExternalUserId(externalUserId);
-});
-
-OneSignal.push(function () {
-  OneSignal.getExternalUserId().then(function (externalUserId) {
-    console.log("externalUserId: ", externalUserId);
-  });
-});
-
-function showTask(name, title, description, HF) {
+function showTask(
+  name,
+  title,
+  description,
+  HF,
+  status,
+  adminName,
+  adminPhoto,
+  workerName,
+  workerPhoto
+) {
   this.taskName = name;
   this.taskTitle = title;
   this.taskDescription = description;
   this.hasFile = HF;
+  this.taskStatus = status;
+  this.taskAdminName = adminName;
+  this.taskAdminPhoto = adminPhoto;
+  this.taskWorkerName = workerName;
+  this.taskWorkerPhoto = workerPhoto;
+
   if (HF) {
     showTaskPage.value = true;
   } else {
@@ -251,7 +270,7 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 
               <header class="flex items-center justify-between leading-tight p-2 md:p-4">
                 <p class="text-grey-darker text-sm">
-                  <span class="text-slate-500">Rependu le </span>
+                  <span class="text-slate-500">Repondu le </span>
 
                   {{ resp.created_at.substring(0, 10) }}
                 </p>
@@ -463,7 +482,19 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
           <td class="px-4 py-3">
             <div class="flex items-center space-x-4 text-sm">
               <button
-                @click="showTask(task.name, task.title, task.description, task.hasFile)"
+                @click="
+                  showTask(
+                    task.name,
+                    task.title,
+                    task.description,
+                    task.hasFile,
+                    task.status,
+                    task.adminName,
+                    task.adminPhoto,
+                    task.workerName,
+                    task.workerPhoto
+                  )
+                "
                 class="font-medium text-green-600 dark:text-green-500 hover:underline"
               >
                 Afficher
@@ -551,28 +582,17 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 </div>
               </div>
               <div class="flex items-center" v-else>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-6 h-6"
+                <a
+                  class="flex items-center no-underline hover:underline text-black"
+                  href="#"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                  <img
+                    alt="Placeholder"
+                    class="block rounded-full w-6 h-6"
+                    v-bind:src="'/uploads/' + taskWorkerPhoto"
                   />
-                </svg>
-
-                <div class="text-sm">
-                  <span
-                    class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600"
-                  >
-                    Pending Request
-                  </span>
-                </div>
+                  <p class="ml-2 text-sm">A {{ taskWorkerName }}</p>
+                </a>
               </div>
             </div>
           </div>
@@ -648,28 +668,17 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                   </div>
                 </div>
                 <div class="flex items-center" v-else>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-6 h-6"
+                  <a
+                    class="flex items-center no-underline hover:underline text-black"
+                    href="#"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                    <img
+                      alt="Placeholder"
+                      class="block rounded-full w-6 h-6"
+                      v-bind:src="'/uploads/' + taskWorkerPhoto"
                     />
-                  </svg>
-
-                  <div class="text-sm">
-                    <span
-                      class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600"
-                    >
-                      Pending Request
-                    </span>
-                  </div>
+                    <p class="ml-2 text-sm">A {{ taskWorkerName }}</p>
+                  </a>
                 </div>
               </div>
             </div>
@@ -716,28 +725,17 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                   </div>
                 </div>
                 <div class="flex items-center" v-else>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-6 h-6"
+                  <a
+                    class="flex items-center no-underline hover:underline text-black"
+                    href="#"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                    <img
+                      alt="Placeholder"
+                      class="block rounded-full w-6 h-6"
+                      v-bind:src="'/uploads/' + taskWorkerPhoto"
                     />
-                  </svg>
-
-                  <div class="text-sm">
-                    <span
-                      class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600"
-                    >
-                      Pending Request
-                    </span>
-                  </div>
+                    <p class="ml-2 text-sm">A {{ taskWorkerName }}</p>
+                  </a>
                   <div class="text-sm">
                     <button
                       class="router-link-active bg-purple-600 text-white inline-flex w-10 text-sm font-semibold transition duration-200 ease-in hover:bg-purple-800 hover:text-white py-2 px-2 rounded-lg"

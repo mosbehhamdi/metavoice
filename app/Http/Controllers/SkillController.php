@@ -31,6 +31,8 @@ class SkillController extends Controller
                 $join->on('users.id', '=', 'skills.worker_id')->orOn('users.id', '=', 'skills.preceiver_id');
             })
             ->where('skills.id', '=', $skillId)
+            ->where('users.type', '=', 'user')
+
             ->get();
         return $teleworkers;
     }

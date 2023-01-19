@@ -19,9 +19,12 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->integer('admin_id');
             $table->integer('worker_id');
+            $table->string('workerName')->nullable();
             $table->integer('task_id');
             $table->string('andminName')->nullable();
             $table->string('andminPhoto')->nullable();
+            $table->string('workerPhoto')->nullable();
+
             $table->string('taskTitle')->nullable();
         
 

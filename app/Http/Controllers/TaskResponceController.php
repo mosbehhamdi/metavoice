@@ -6,6 +6,7 @@ use App\Models\taskResponce;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class TaskResponceController extends Controller
 {
@@ -66,14 +67,25 @@ class TaskResponceController extends Controller
             'task_id' => $task->id,
             'name' => $fileName,
             'andminName'=>$admin->name,
+            'workerName'=>Auth::user()->name,
             'andminPhoto'=>$admin->profilePicture,
+            'workerPhoto'=>Auth::user()->profilePicture,
+
             'taskTitle'=>$task->title,
         ]);
 
         $task->update([
-            'completed' => true,
+            'status' => 'Repondu',
            
 
+        ]);
+
+
+
+        
+        
+        User::where('id', Auth::user()->id)->update([
+            "available" => false,
         ]);
     }
 

@@ -10,7 +10,7 @@ class taskResponce extends Model
 {
     use HasFactory;
     protected $fillable = [
-         'name','description','admin_id','worker_id','task_id','andminName','andminPhoto','taskTitle'
+         'name','description','admin_id','worker_id','task_id','andminName','andminPhoto','workerPhoto','taskTitle','workerName'
     ];
   
 

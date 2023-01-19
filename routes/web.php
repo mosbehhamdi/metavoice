@@ -6,6 +6,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskResponceController;
+
+use App\Http\Controllers\InstructionsController;
+
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -49,8 +52,20 @@ Route::middleware('auth')->group(function () {
     Route::any('deleteTask/{id}', [TaskController::class, 'destroyTask'])->name('deleteTask');
     Route::get('indexTask', [TaskController::class, 'indexTask'])->name('indexTask');
     Route::put('/updateTask', [TaskController::class, 'updateTask'])->name('updateTask');
-    Route::get('indexWorkerTasks', [TaskController::class, 'indexWorkerTasks'])->name('indexWorkerTasks');
+    Route::put('/tagAsValidTask/{id}', [TaskController::class, 'tagAsValidTask'])->name('tagAsValidTask');
+    Route::get('indexAdminValidTask', [TaskController::class, 'indexAdminValidTask'])->name('indexAdminValidTask');
+    Route::get('indexAdminRespondedTask', [TaskController::class, 'indexAdminRespondedTask'])->name('indexAdminRespondedTask');
+    Route::get('indexAdminToResolveTask', [TaskController::class, 'indexAdminToResolveTask'])->name('indexAdminToResolveTask');
 
+    Route::get('indexWorkerTasks', [TaskController::class, 'indexWorkerTasks'])->name('indexWorkerTasks');
+    Route::get('indexWorkerRespondedTask', [TaskController::class, 'indexWorkerRespondedTask'])->name('indexWorkerRespondedTask');
+    Route::get('indexWorkerToResolveTask', [TaskController::class, 'indexWorkerToResolveTask'])->name('indexWorkerToResolveTask');
+    Route::get('indexWorkerValidTask', [TaskController::class, 'indexWorkerValidTask'])->name('indexWorkerValidTask');
+
+    
+    Route::post('sendResolvingDescription', [InstructionsController::class, 'sendResolvingDescription'])->name('sendResolvingDescription');
+
+    
     Route::post('storeTaskResp', [TaskResponceController::class, 'store'])->name('storeTaskResp');
     Route::get('taskResponses/{id}', [TaskResponceController::class, 'index'])->name('taskResponses');
     

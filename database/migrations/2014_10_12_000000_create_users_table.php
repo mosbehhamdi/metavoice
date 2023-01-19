@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('profilePicture')->nullable();
             $table->tinyInteger('type')->default(0);
-            $table->boolean('available')->default(true);
+            $table->boolean('available');
 
 
             ;

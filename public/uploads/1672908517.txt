@@ -1,0 +1,22 @@
+Suite à la présentation du projet de l’équipe encadrante du centre Metaworks de Djerba, je vais maintenant vous détailler les besoins à mettre en place 👩‍💻.
+Tout d’abord un service RH constitué :
+Service comptabilité afin de gérer les factures, les achats, les ventes, les paies, les bilans…
+👉Une secrétaire pour organiser les demandes extérieures mais aussi internes et mettre en relation les différents services .
+           👉Un service marketing avec       graphiste/développeur/photographe/ désigner pour créer et gérer l’attractivité de la boutique et travailler sur la communication à travers les réseaux sociaux. 
+           👉Un commercial sera en relation directe entre le terrain (les commerces et le service marketing),afin de faire le lien pour les prix, les OP éventuelles, les retours clients positifs ou négatifs …
+           👉Un service juridique va faire toutes les démarches administratives pour les différents accords, litiges …
+           👉Un service logistique va gérer à la fois le stock, l emballage, la livraison  mais aussi les retours en cas de non satisfaction ou défectueux en lien avec le commercial.
+           👉Un responsable qualité va gérer le tout afin de faire fluctuer le travail de
+ chacun, générer une ambiance à la fois professionnelle et familiale et de gérer les différentes demandes positives ou négatives pour que la boutique est une belle image sur le professionnalisme de chacun qui permettra de générer du flux, des ventes du travail et de la satisfaction qui engendra de l argent.
+
+Nous allons gérer la plate-forme de service sous forme 3 étapes :
+💥La personnalisation de la boutique ainsi que le choix d'un thème des fonctionnalités et tout ce dont notre marque .
+💥Le lancement de notre site internet depuis le back- office:
+.catalogue produits.
+.commande. 
+.paiement
+.livraisons 
+.données
+💥Le développement de notre business avec des actions marketing adaptées pour attirer de nouveaux clients. 
+
+

@@ -21,7 +21,11 @@ return new class extends Migration
             $table->integer('admin_id');
             $table->integer('worker_id');
             $table->boolean('hasFile');
-            $table->boolean('completed')->default(false);
+            $table->string('status')->default('En attente');
+            $table->string('adminName');
+            $table->string('adminPhoto');
+            $table->string('workerName');
+            $table->string('workerPhoto');
             $table->timestamps();
             
         });
